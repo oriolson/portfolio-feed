@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "title": "Bringing Agents to Mobile",
+    "date": "Dec, 2025",
+    "image": "https://picsum.photos/800/400?random=1",
+    "likeCount": "10k+ users engaged with this",
+    "content": "Bringing Agentic workflows to GitHub Mobile so developers can build and iterate on their ideas faster.",
+    "link": "#"
+  },
+  {
+    "id": "2",
+    "title": "Second Post",
+    "date": "January 2, 2024",
+    "image": "https://picsum.photos/800/400?random=2",
+    "likeCount": "10k+ users engaged with this",
+    "content": "This is the second post in the feed.",
+    "link": "#"
+  },
+  {
+    "id": "3",
+    "title": "Third Post",
+    "date": "January 3, 2024",
+    "image": "https://picsum.photos/800/400?random=3",
+    "likeCount": "10k+ users engaged with this",
+    "content": "This is the third post in the feed.",
+    "link": "#"
+  }
+]
