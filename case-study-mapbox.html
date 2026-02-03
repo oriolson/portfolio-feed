@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalizing the Mapbox dashboard for new users - Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #140700;
+            background: #f8f8f7;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        
+        .email-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .email-button:hover {
+            background: #5568d3;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .case-study-header {
+            margin-bottom: 32px;
+        }
+        
+        .case-study-title {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        .case-study-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+        
+        .case-study-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 32px;
+            display: block;
+            border-radius: 16px;
+        }
+        
+        .case-study-content {
+            font-size: 16px;
+        }
+        
+        .case-study-content h2 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        
+        .case-study-content h3 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .case-study-content p {
+            margin-bottom: 16px;
+        }
+        
+        .case-study-content ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .case-study-content li {
+            margin-bottom: 8px;
+        }
+        
+        .case-study-content strong {
+            font-weight: 600;
+        }
+        
+        .challenge-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .challenge-list li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .challenge-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #140700;
+            font-weight: bold;
+        }
+        
+        .solution-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 24px;
+            border: 1px solid #eee;
+        }
+        
+        .solution-section h3 {
+            margin-top: 0;
+        }
+        
+        .case-study-content img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin: 24px 0;
+            display: block;
+            border-radius: 16px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .solution-section img {
+            margin-top: 24px;
+            margin-bottom: 0;
+        }
+        
+        .case-study-content img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .image-lightbox.active {
+            display: flex;
+        }
+        
+        .image-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+        
+        .image-lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: opacity 0.3s;
+        }
+        
+        .image-lightbox-img.loading {
+            opacity: 0;
+        }
+        
+        .image-lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav.prev {
+            left: 20px;
+        }
+        
+        .image-lightbox-nav.next {
+            right: 20px;
+        }
+        
+        .image-lightbox-nav.hidden {
+            display: none;
+        }
+        
+        .image-lightbox-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ori Olson</h1>
+        <a href="mailto:your-email@example.com" class="email-button">Email me</a>
+    </header>
+    
+    <a href="index.html" class="back-link">← Back to feed</a>
+    
+    <article class="case-study-content">
+        <div class="case-study-header">
+            <h1 class="case-study-title">Personalizing the Mapbox dashboard for new users</h1>
+            <div class="case-study-meta">
+                <strong>Ori Olson</strong> • Lead UX Designer
+            </div>
+            <img src="project-images/mapbox/mapbox-post.avif" alt="Mapbox Dashboard" class="case-study-image" data-image-index="0" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+        </div>
+        
+        <section>
+            <h2>Overview</h2>
+            <p>This project centered around a strategic redesign of the Mapbox Dashboard, with the goal of improving new user engagement and activation. By delivering personalized, use-case-specific content, the revamped dashboard aimed to empower user workflows, and reduce early-stage churn.</p>
+            
+            <p><strong>My role:</strong> Lead UX Designer</p>
+            <p><strong>Responsibilities:</strong> User research, creating wireframes, designing and testing prototypes, analyzing data, collaborating with cross-functional teams, illustration, and iterating based on user feedback.</p>
+        </section>
+        
+        <section>
+            <h2>Problem</h2>
+            <p>The existing account dashboard did not resonate with users' diverse workflows. Approximately 18% of new users who signed up and confirmed their email abandoned the account page during their first login.</p>
+        </section>
+        
+        <section>
+            <h2>Hypothesis</h2>
+            <p>If we personalize the content on the Mapbox Dashboard based on the user's specific use case upon their first login, then we expect to see an increase in new users making a billable API call within their first week, signaling stronger user engagement and adoption of Mapbox.</p>
+        </section>
+        
+        <section>
+            <h2>Users and Audience</h2>
+            <p>The primary users were <strong>new users</strong> who signed up for Mapbox and confirmed their email. Mapbox users consisted of <strong>developers, business owners, and hobbyists</strong>. Each with unique needs and use cases.</p>
+        </section>
+        
+        <section>
+            <h2>Approach</h2>
+            <p>I started with documenting the new user journey and digging into previous user feedback, user interviews, and analytics to flag areas of improvement.</p>
+            
+            <p>I conducted a collaborative workshop with the developers, marketing team members, support members, and our dedicated project manager. The team identified the problem, and I was able to conduct user research and come up with solution ideas. Wireframes were created for multiple design explorations. I iterated designs based on user research insights and team feedback in order to get to our final solution.</p>
+            
+            <img src="project-images/mapbox/mapbox-iterations.webp" alt="Design iterations and wireframes" class="case-study-image" data-image-index="2" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+            
+            <h3>User research</h3>
+            <p>Our user research aimed to distinguish between successful and unsuccessful users by exploring the actions they took within the platform. I conducted user interviews with Mapbox 15 users who had signed up in the past 30 days and learned about their experiences and interactions with the Mapbox Dashboard. The insights gleaned from these sessions highlighted key user pain points and informed our design direction.</p>
+            
+            <img src="project-images/mapbox/mapbox-research.webp" alt="User research" class="case-study-image" data-image-index="1" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+            
+            <h3>Insights</h3>
+            <ul class="challenge-list">
+                <li><strong>Billing Concerns:</strong> Users were apprehensive about the pricing structure, fearing unexpected charges. They expressed a need for clear communication about their current API call tier and a comprehensive guide to how billing works across all services.</li>
+                <li><strong>Lack of Direction:</strong> New users often struggled to identify their starting point or which services to utilize. This highlighted the necessity for an intuitive onboarding process and guidance to help users navigate the platform.</li>
+                <li><strong>Need for Personalized Content:</strong> Users expected to see content relevant to their specific use case since Mapbox included multiple tools and services that may or may not be relevant to their goals.</li>
+            </ul>
+            
+            <p>These insights served as the foundation for our solution experiments, as they directly addressed the identified user needs and pain points. They guided the process of ideating and testing potential improvements to the Mapbox Dashboard.</p>
+        </section>
+        
+        <section>
+            <h2>Solution</h2>
+            <p>The solution involved experimenting with various approaches to address the primary pain points. Each experiment was tested with control and test groups to validate the effectiveness.</p>
+            
+            <h3>Final solution</h3>
+            
+            <div class="solution-section">
+                <h3>Use-case Survey during Onboarding</h3>
+                <p>Asking first-time users about their use case to serve them personalized content on their account dashboard. Variants of the survey were tested to determine the most relevant language and use cases for users.</p>
+                <img src="project-images/mapbox/mapbox-solution-1.webp" alt="Use-case Survey during Onboarding" class="case-study-image" data-image-index="3" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+            </div>
+            
+            <div class="solution-section">
+                <h3>Delivering Personalized Content</h3>
+                <p>I collaborated with other teams to identify the appropriate call-to-actions and tools aligned with each use case. I also created illustrations for each Mapbox service.</p>
+                <img src="project-images/mapbox/mapbox-solution-2.webp" alt="Delivering Personalized Content" class="case-study-image" data-image-index="4" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+            </div>
+            
+            <div class="solution-section">
+                <h3>Addressing Billing Concerns</h3>
+                <p>Aiming to clarify the pricing structure, clear information about the free tier, and resources on how billing works for all services were provided upfront.</p>
+                <img src="project-images/mapbox/mapbox-solution-3.webp" alt="Addressing Billing Concerns" class="case-study-image" data-image-index="5" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Impact</h2>
+            <p>The project had a significant impact after two weeks of running the experiment, validating the new experience.</p>
+            
+            <h3>User Activation</h3>
+            <ul class="challenge-list">
+                <li>Before the project: 18% of new users abandoned the account page during their first login.</li>
+                <li>After the project: User activation increased by <strong>5%</strong>, resulting in a <strong>lower abandonment rate.</strong></li>
+            </ul>
+            
+            <h3>Engagement</h3>
+            <ul class="challenge-list">
+                <li>Before the project: The total click-through rate (CTR) on the account dashboard was 58%.</li>
+                <li>After the project: The new experience led to a <strong>24% increase in engagement,</strong> with a total CTR of <strong>72%.</strong></li>
+            </ul>
+            
+            <img src="project-images/mapbox/mapbox-impact.webp" alt="Impact metrics" class="case-study-image" data-image-index="6" data-all-images='["project-images/mapbox/mapbox-post.avif", "project-images/mapbox/mapbox-research.webp", "project-images/mapbox/mapbox-iterations.webp", "project-images/mapbox/mapbox-solution-1.webp", "project-images/mapbox/mapbox-solution-2.webp", "project-images/mapbox/mapbox-solution-3.webp", "project-images/mapbox/mapbox-impact.webp"]'>
+        </section>
+        
+        <section>
+            <h2>Future Considerations</h2>
+            <ul class="challenge-list">
+                <li>Optimizing the use-case survey and adding additional identifiers.</li>
+                <li>Collaborating with service owners to refine their onboarding funnel.</li>
+                <li>Experimenting with adding dynamic content like new features and blogs.</li>
+            </ul>
+        </section>
+    </article>
+    
+    <div class="image-lightbox" id="imageLightbox">
+        <div class="image-lightbox-content" id="imageLightboxContent">
+            <button class="image-lightbox-close" id="imageLightboxClose">&times;</button>
+            <button class="image-lightbox-nav prev" id="imageLightboxPrev">‹</button>
+            <button class="image-lightbox-nav next" id="imageLightboxNext">›</button>
+            <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="Expanded image">
+            <div class="image-lightbox-counter" id="imageLightboxCounter"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Image lightbox functionality
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+        let imageClickStartX = 0;
+        let imageClickStartY = 0;
+        let imageWasDragged = false;
+        
+        function enableImageLightbox() {
+            // Add click handlers to all images
+            const allImages = document.querySelectorAll('.case-study-image');
+            allImages.forEach(img => {
+                // Track mouse/touch start to detect drags
+                img.addEventListener('mousedown', (e) => {
+                    imageClickStartX = e.clientX;
+                    imageClickStartY = e.clientY;
+                    imageWasDragged = false;
+                });
+                
+                img.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        imageClickStartX = e.touches[0].clientX;
+                        imageClickStartY = e.touches[0].clientY;
+                        imageWasDragged = false;
+                    }
+                });
+                
+                img.addEventListener('mousemove', (e) => {
+                    if (imageClickStartX !== 0 || imageClickStartY !== 0) {
+                        const deltaX = Math.abs(e.clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0 && (imageClickStartX !== 0 || imageClickStartY !== 0)) {
+                        const deltaX = Math.abs(e.touches[0].clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.touches[0].clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('click', (e) => {
+                    // Don't open lightbox if this was a drag
+                    if (imageWasDragged) {
+                        imageWasDragged = false;
+                        imageClickStartX = 0;
+                        imageClickStartY = 0;
+                        return;
+                    }
+                    
+                    e.stopPropagation();
+                    const imageSrc = img.src;
+                    const imageIndex = parseInt(img.getAttribute('data-image-index')) || 0;
+                    const allImagesJson = img.getAttribute('data-all-images');
+                    let imagesArray = [];
+                    
+                    try {
+                        imagesArray = JSON.parse(allImagesJson || '[]');
+                    } catch (e) {
+                        imagesArray = [imageSrc];
+                    }
+                    
+                    openImageLightbox(imageSrc, imageIndex, imagesArray);
+                    
+                    // Reset
+                    imageWasDragged = false;
+                    imageClickStartX = 0;
+                    imageClickStartY = 0;
+                });
+            });
+        }
+        
+        function openImageLightbox(imageSrc, imageIndex, allImages) {
+            currentLightboxImages = allImages.filter(img => img && img.trim());
+            currentLightboxIndex = Math.max(0, Math.min(imageIndex, currentLightboxImages.length - 1));
+            
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxPrev = document.getElementById('imageLightboxPrev');
+            const lightboxNext = document.getElementById('imageLightboxNext');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            // Show/hide navigation based on number of images
+            if (currentLightboxImages.length > 1) {
+                lightboxPrev.classList.remove('hidden');
+                lightboxNext.classList.remove('hidden');
+                lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+                lightboxCounter.style.display = 'block';
+            } else {
+                lightboxPrev.classList.add('hidden');
+                lightboxNext.classList.add('hidden');
+                lightboxCounter.style.display = 'none';
+            }
+            
+            // Load and display image
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        function navigateLightbox(direction) {
+            if (currentLightboxImages.length <= 1) return;
+            
+            if (direction === 'prev') {
+                currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+            } else if (direction === 'next') {
+                currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+            }
+            
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+        }
+        
+        // Lightbox event listeners
+        document.getElementById('imageLightboxClose').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeImageLightbox();
+        });
+        
+        document.getElementById('imageLightboxPrev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('prev');
+        });
+        
+        document.getElementById('imageLightboxNext').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('next');
+        });
+        
+        // Close on backdrop click
+        document.getElementById('imageLightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'imageLightbox') {
+                closeImageLightbox();
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('imageLightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeImageLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox('prev');
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox('next');
+            }
+        });
+        
+        // Enable lightbox on page load
+        enableImageLightbox();
+    </script>
+</body>
+</html>
