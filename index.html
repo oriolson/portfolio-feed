@@ -39,7 +39,7 @@
             font-weight: 500;
         }
         
-        .admin-toggle {
+        .email-button {
             background: #667eea;
             color: white;
             border: none;
@@ -48,14 +48,12 @@
             font-size: 14px;
             cursor: pointer;
             font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
         }
         
-        .admin-toggle:hover {
+        .email-button:hover {
             background: #5568d3;
-        }
-        
-        .admin-toggle.active {
-            background: #764ba2;
         }
         
         .feed {
@@ -196,208 +194,6 @@
             text-decoration: underline;
         }
         
-        .feed-item-edit-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
-            display: none;
-        }
-        
-        .admin-mode .feed-item-edit-btn {
-            display: block;
-        }
-        
-        .feed-item-edit-btn:hover {
-            background: #5568d3;
-        }
-        
-        .feed-item-delete-btn {
-            position: absolute;
-            top: 50px;
-            right: 20px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
-            display: none;
-        }
-        
-        .admin-mode .feed-item-delete-btn {
-            display: block;
-        }
-        
-        .feed-item-delete-btn:hover {
-            background: #c82333;
-        }
-        
-        .admin-panel {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .admin-mode .admin-panel {
-            display: block;
-        }
-        
-        .admin-panel h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-        
-        .admin-actions {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .admin-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        
-        .admin-btn:hover {
-            background: #5568d3;
-        }
-        
-        .admin-btn.secondary {
-            background: #666;
-        }
-        
-        .admin-btn.secondary:hover {
-            background: #555;
-        }
-        
-        .admin-btn.danger {
-            background: #dc3545;
-            margin-right: auto;
-        }
-        
-        .admin-btn.danger:hover {
-            background: #c82333;
-        }
-        
-        .admin-btn.download {
-            background: #28a745;
-        }
-        
-        .admin-btn.download:hover {
-            background: #218838;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-header h3 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-close:hover {
-            color: #333;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #333;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 24px;
-        }
         
         .loading {
             text-align: center;
@@ -540,63 +336,13 @@
 <body>
     <header>
         <h1>Ori Olson</h1>
-        <button class="admin-toggle" id="adminToggle">Admin Mode</button>
+        <a href="mailto:your-email@example.com" class="email-button">Email me</a>
     </header>
-    
-    <div class="admin-panel" id="adminPanel">
-        <h2>Admin Panel</h2>
-        <div class="admin-actions">
-            <button class="admin-btn" id="addPostBtn">Add New Post</button>
-            <button class="admin-btn download" id="downloadJsonBtn">Download JSON</button>
-            <button class="admin-btn secondary" id="cancelAdminBtn">Exit Admin Mode</button>
-        </div>
-    </div>
     
     <div class="loading" id="loading">Loading feed...</div>
     <div class="error" id="error" style="display: none;"></div>
     
     <ul class="feed" id="feed"></ul>
-    
-    <div class="modal" id="postModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Edit Post</h3>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-            <form id="postForm">
-                <input type="hidden" id="postId">
-                <div class="form-group">
-                    <label for="postTitle">Title (optional)</label>
-                    <input type="text" id="postTitle">
-                </div>
-                <div class="form-group">
-                    <label for="postDate">Date (optional)</label>
-                    <input type="text" id="postDate">
-                </div>
-                <div class="form-group">
-                    <label for="postImage">Image URLs (optional, one per line or comma-separated)</label>
-                    <textarea id="postImage" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="postLikeCount">Like Count Text (optional)</label>
-                    <input type="text" id="postLikeCount">
-                </div>
-                <div class="form-group">
-                    <label for="postContent">Content (optional)</label>
-                    <textarea id="postContent"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="postLink">Link URL (optional)</label>
-                    <input type="url" id="postLink">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="admin-btn danger" id="deletePostBtn" style="display: none;">Delete</button>
-                    <button type="button" class="admin-btn secondary" id="cancelFormBtn">Cancel</button>
-                    <button type="submit" class="admin-btn">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
     
     <div class="image-lightbox" id="imageLightbox">
         <div class="image-lightbox-content" id="imageLightboxContent">
@@ -610,16 +356,6 @@
     
     <script>
         let posts = [];
-        let isAdminMode = false;
-        
-        // Check URL parameter for admin mode
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('admin') === 'true') {
-            isAdminMode = true;
-            document.body.classList.add('admin-mode');
-            document.getElementById('adminToggle').classList.add('active');
-            document.getElementById('adminToggle').textContent = 'Admin Mode (ON)';
-        }
         
         // Load posts from JSON
         async function loadPosts() {
@@ -662,6 +398,8 @@
                                 </g>
                             </svg>
                     `
+                    : post.id === '5'
+                    ? `<img src="project-images/mapbox/mapbox-logo-icon.png" alt="Mapbox" style="width: 100%; height: 100%; object-fit: contain;">`
                     : `
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
                                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -702,10 +440,10 @@
                 
                 const contentHtml = post.content && post.content.trim() ? `<div class="feed-item-content">${escapeHtml(post.content)}</div>` : '';
                 
-                const linkHtml = post.link && post.link.trim() ? `<a href="${escapeHtml(post.link)}" class="feed-item-link">Read more</a>` : '';
+                const linkText = (post.id === '1' || post.id === '2' || post.id === '3') ? 'Read changelog' : 'Read more';
+                const linkHtml = post.link && post.link.trim() ? `<a href="${escapeHtml(post.link)}" class="feed-item-link">${linkText}</a>` : '';
                 
                 li.innerHTML = `
-                    <button class="feed-item-edit-btn" onclick="editPost('${post.id}')">Edit</button>
                     ${headerHtml}
                     ${imageHtml}
                     ${likeCountHtml}
@@ -1083,180 +821,6 @@
             div.textContent = text;
             return div.innerHTML;
         }
-        
-        // Toggle admin mode
-        document.getElementById('adminToggle').addEventListener('click', () => {
-            isAdminMode = !isAdminMode;
-            if (isAdminMode) {
-                document.body.classList.add('admin-mode');
-                document.getElementById('adminToggle').classList.add('active');
-                document.getElementById('adminToggle').textContent = 'Admin Mode (ON)';
-                // Update URL
-                const url = new URL(window.location);
-                url.searchParams.set('admin', 'true');
-                window.history.pushState({}, '', url);
-            } else {
-                document.body.classList.remove('admin-mode');
-                document.getElementById('adminToggle').classList.remove('active');
-                document.getElementById('adminToggle').textContent = 'Admin Mode';
-                // Remove URL parameter
-                const url = new URL(window.location);
-                url.searchParams.delete('admin');
-                window.history.pushState({}, '', url);
-                closeModal();
-            }
-        });
-        
-        // Cancel admin mode
-        document.getElementById('cancelAdminBtn').addEventListener('click', () => {
-            isAdminMode = false;
-            document.body.classList.remove('admin-mode');
-            document.getElementById('adminToggle').classList.remove('active');
-            document.getElementById('adminToggle').textContent = 'Admin Mode';
-            const url = new URL(window.location);
-            url.searchParams.delete('admin');
-            window.history.pushState({}, '', url);
-            closeModal();
-        });
-        
-        // Add new post
-        document.getElementById('addPostBtn').addEventListener('click', () => {
-            openModal('new');
-        });
-        
-        // Edit post
-        window.editPost = function(postId) {
-            openModal('edit', postId);
-        };
-        
-        // Delete post
-        window.deletePost = function(postId) {
-            if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-                posts = posts.filter(p => p.id !== postId);
-                renderPosts();
-                closeModal();
-            }
-        };
-        
-        // Delete button in modal
-        document.getElementById('deletePostBtn').addEventListener('click', () => {
-            const postId = document.getElementById('postId').value;
-            if (postId) {
-                deletePost(postId);
-            }
-        });
-        
-        // Open modal
-        function openModal(mode, postId = null) {
-            const modal = document.getElementById('postModal');
-            const form = document.getElementById('postForm');
-            const modalTitle = document.getElementById('modalTitle');
-            
-            if (mode === 'new') {
-                modalTitle.textContent = 'Add New Post';
-                form.reset();
-                document.getElementById('postId').value = '';
-                document.getElementById('deletePostBtn').style.display = 'none';
-            } else {
-                modalTitle.textContent = 'Edit Post';
-                const post = posts.find(p => p.id === postId);
-                if (post) {
-                    document.getElementById('postId').value = post.id || '';
-                    document.getElementById('postTitle').value = post.title || '';
-                    document.getElementById('postDate').value = post.date || '';
-                    // Populate images field: if images array exists, use it; otherwise use single image
-                    if (post.images && Array.isArray(post.images) && post.images.length > 0) {
-                        document.getElementById('postImage').value = post.images.filter(img => img && img.trim()).join('\n');
-                    } else {
-                        document.getElementById('postImage').value = post.image || '';
-                    }
-                    document.getElementById('postLikeCount').value = post.likeCount || '';
-                    document.getElementById('postContent').value = post.content || '';
-                    document.getElementById('postLink').value = post.link || '';
-                }
-                document.getElementById('deletePostBtn').style.display = 'block';
-            }
-            
-            modal.classList.add('active');
-        }
-        
-        // Close modal
-        function closeModal() {
-            document.getElementById('postModal').classList.remove('active');
-        }
-        
-        // Modal close handlers
-        document.getElementById('modalClose').addEventListener('click', closeModal);
-        document.getElementById('cancelFormBtn').addEventListener('click', closeModal);
-        
-        // Close modal on outside click
-        document.getElementById('postModal').addEventListener('click', (e) => {
-            if (e.target.id === 'postModal') {
-                closeModal();
-            }
-        });
-        
-        // Handle form submission
-        document.getElementById('postForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const postId = document.getElementById('postId').value;
-            const imageInput = document.getElementById('postImage').value.trim();
-            
-            // Parse image URLs: support both comma-separated and newline-separated
-            let images = [];
-            if (imageInput) {
-                images = imageInput
-                    .split(/[,\n]/)
-                    .map(url => url.trim())
-                    .filter(url => url.length > 0);
-            }
-            
-            const postData = {
-                id: postId || Date.now().toString(),
-                title: document.getElementById('postTitle').value,
-                date: document.getElementById('postDate').value,
-                likeCount: document.getElementById('postLikeCount').value,
-                content: document.getElementById('postContent').value,
-                link: document.getElementById('postLink').value
-            };
-            
-            // Store images array if there are any, otherwise don't include image/images fields
-            if (images.length > 0) {
-                postData.images = images;
-            } else if (imageInput) {
-                // If only one URL was provided, store as images array with one item for consistency
-                postData.images = [imageInput];
-            }
-            
-            if (postId) {
-                // Update existing post
-                const index = posts.findIndex(p => p.id === postId);
-                if (index !== -1) {
-                    posts[index] = postData;
-                }
-            } else {
-                // Add new post
-                posts.unshift(postData);
-            }
-            
-            renderPosts();
-            closeModal();
-        });
-        
-        // Download JSON
-        document.getElementById('downloadJsonBtn').addEventListener('click', () => {
-            const json = JSON.stringify(posts, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'posts.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
         
         // Load posts on page load
         loadPosts();

@@ -8,8 +8,8 @@
       "project-images/Agents-on-Mobile/Slide 4.jpg",
       "project-images/Agents-on-Mobile/Slide 5.jpg"
     ],
-    "likeCount": "10k+ users engaged with this",
-    "content": "Bringing Agentic workflows to GitHub Mobile so developers can build and iterate on their ideas faster. Designed Agent HQ, agentic workflows, and live activities for iOS and Android.",
+    "likeCount": "19% increase in active Coding Agent users month over month ",
+    "content": "Bringing Agentic workflows to GitHub Mobile so developers can build and iterate on their ideas faster using coding agents and copilot code review. Designed Agent HQ, agentic workflows, and live activities for iOS and Android.",
     "link": "https://github.blog/changelog/2025-09-24-start-and-track-copilot-coding-agent-tasks-in-github-mobile/s"
   },
   {
@@ -17,35 +17,33 @@
     "title": "Fine Tuned Models",
     "date": "Sept 2024",
     "image": "project-images/Agents-on-Mobile/model-trainer.jpg",
-    "likeCount": "10k+ users engaged with this",
-    "content": "Fine tuned models to make AI Storefront more accurate and helpful.",
+    "likeCount": "100k+ users showed an increase of 15% in acceptance rate",
+    "content": "Designed the enterprise experience for custom fine-tuned models that enabled organizations to train Copilot on their codebases, internal libraries, and telemetry to delivery personalized code suggestions that match their specific coding standards and practices.",
     "link": "https://github.blog/news-insights/product-news/fine-tuned-models-are-now-in-limited-public-beta-for-github-copilot-enterprise/"
   },
   {
     "id": "3",
-    "title": "Redesigning the Marketplace",
-    "date": "May 2024",
+    "title": "Copilot Extensions",
+    "date": "Aug 2024",
     "image": "project-images/Agents-on-Mobile/extensions.jpg",
-    "likeCount": "10k+ users engaged with this",
-    "content": "This is the third post in the feed.",
-    "link": "#"
+    "content": "Designed the chat experience for GitHub's extensibility platform, enabling developers to use third-party tools directly in Copilot Chat. Redesigned marketplace to support third party extensions and pricing models.",
+    "link": "https://github.blog/changelog/2024-09-17-announcing-the-public-beta-of-github-copilot-extensions-%f0%9f%8e%89/"
   },
   {
     "id": "4",
     "title": "AI Storefront Chat",
-    "date": "Jun 2022",
-    "image": "https://picsum.photos/800/400?random=3",
-    "likeCount": "10k+ users engaged with this",
-    "content": "This is the third post in the feed.",
-    "link": "#"
+    "date": "April 2023",
+    "image": "project-images/Shopify/ai-chat-post.webp",
+    "content": "Designed proof of concept for Shopify Inbox's AI-powered storefront chat, helping merchants automate customer conversations. Focused on building trust through configurable settings like tone, branding, and handoff while driving activation. ",
+    "link": "https://www.shopify.com/blog/shopify-inbox-ai-powered-storefront-chat"
   },
   {
     "id": "5",
     "title": "Dashboard and Onboarding Experience",
     "date": "Feb 2021",
-    "image": "https://picsum.photos/800/400?random=3",
-    "likeCount": "10k+ users engaged with this",
-    "content": "This is the third post in the feed.",
+    "image": "project-images/mapbox/mapbox-post.avif",
+    "likeCount": "24% increase in engagement and 5% lift in activation",
+    "content": "Redesigned the Mapbox dashboard and sign up flow to improve new user onboarding and reduce early-stage churn. Introduced personalized workflows and clearer entry points for key actions like adding data and styling maps.",
     "link": "#"
   }
 ]
