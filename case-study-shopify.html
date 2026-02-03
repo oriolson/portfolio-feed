@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Storefront Chat - Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #140700;
+            background: #f8f8f7;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        
+        .email-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .email-button:hover {
+            background: #5568d3;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .case-study-header {
+            margin-bottom: 32px;
+        }
+        
+        .case-study-title {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        .case-study-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+        
+        .case-study-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 32px;
+            display: block;
+            border-radius: 16px;
+        }
+        
+        .case-study-content {
+            font-size: 16px;
+        }
+        
+        .case-study-content h2 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        
+        .case-study-content h3 {
+            font-family: "Source Serif 4", ui-serif, Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .case-study-content p {
+            margin-bottom: 16px;
+        }
+        
+        .case-study-content ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .case-study-content li {
+            margin-bottom: 8px;
+        }
+        
+        .case-study-content strong {
+            font-weight: 600;
+        }
+        
+        .challenge-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .challenge-list li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .challenge-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #140700;
+            font-weight: bold;
+        }
+        
+        .solution-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 24px;
+            border: 1px solid #eee;
+        }
+        
+        .solution-section h3 {
+            margin-top: 0;
+        }
+        
+        .case-study-content img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin: 24px 0;
+            display: block;
+            border-radius: 16px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .solution-section img {
+            margin-top: 24px;
+            margin-bottom: 0;
+        }
+        
+        .case-study-content img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .image-lightbox.active {
+            display: flex;
+        }
+        
+        .image-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+        
+        .image-lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: opacity 0.3s;
+        }
+        
+        .image-lightbox-img.loading {
+            opacity: 0;
+        }
+        
+        .image-lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav.prev {
+            left: 20px;
+        }
+        
+        .image-lightbox-nav.next {
+            right: 20px;
+        }
+        
+        .image-lightbox-nav.hidden {
+            display: none;
+        }
+        
+        .image-lightbox-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            margin: 24px 0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ori Olson</h1>
+        <a href="mailto:your-email@example.com" class="email-button">Email me</a>
+    </header>
+    
+    <a href="index.html" class="back-link">← Back to feed</a>
+    
+    <article class="case-study-content">
+        <div class="case-study-header">
+            <h1 class="case-study-title">How might we...Onboard merchants to fully automated chat, powered by AI</h1>
+            <div class="case-study-meta">
+                <strong>Ori Olson</strong> • Lead Product Designer
+            </div>
+            <img src="project-images/Shopify/ai-chat-post.webp" alt="Shopify AI Chat" class="case-study-image" data-image-index="0" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+        </div>
+        
+        <section>
+            <h2>Overview</h2>
+            <p>This ongoing project focuses on designing a seamless onboarding and setup process for a fully automated chat system in Shopify Inbox. The objective is to design a proof of concept for Shopify Inbox's automated chat, enabling merchants to add a ChatGPT-enabled widget to their storefront.</p>
+            
+            <p><strong>My role:</strong> Lead Product Designer</p>
+            <p><strong>Responsibilities:</strong> Collaborating with the Shopify AI team, creating wireframes, prototypes, and planning user research.</p>
+        </section>
+        
+        <section>
+            <h2>Problem</h2>
+            <p>To position ourselves to better attract larger-scale Shopify merchants we wanted to introduce a new fully automated chat solution that utilizes Shopify store data to provide personalized shopping experiences at scale. The challenge was to design an efficient and simple-to-use interface for large merchants that may be new to AI, providing a balance between a streamlined setup and a comprehensive onboarding experience.</p>
+            
+            <h3>Challenges</h3>
+            <ul class="challenge-list">
+                <li>We needed our prompt to be able to handle nuanced questions, gather intent, and pull data from existing Shopify Data</li>
+                <li>We wanted to reduce the need for duplicate data entry for merchants since we had access to Shopify data</li>
+                <li>We wanted to ensure that our solution kept the merchant's trust intact and align with AI code of ethics</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Hypothesis</h2>
+            <p>By designing a seamless onboarding and setup process for a fully automated chat that utilizes a merchant's Shopify store data, merchants would feel confident in our chat's ability to provide a personalized shopping experience at scale.</p>
+            <p>We developed and aligned on these hypotheses through a collaborative workshop that I facilitated.</p>
+            <img src="project-images/Shopify/hypothesis.avif" alt="Hypothesis workshop" class="case-study-image" data-image-index="1" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+        </section>
+        
+        <section>
+            <h2>Users and Audience</h2>
+            <p>Our primary users are large Shopify merchants not currently using Inbox who want to create an automated and efficient chat that provides personalized shopping assistance at scale. Think of large retail stores like Fashion Nova, Alo, and Allbirds.</p>
+        </section>
+        
+        <section>
+            <h2>Challenge: HMW quickly learn merchant needs and create a "minimal lovable product"?</h2>
+            
+            <h3>Principles & constraints</h3>
+            <ul class="challenge-list">
+                <li>Move fast and learn quickly (6-week cycle) and leverage existing Shopify patterns.</li>
+                <li>Exclude high-fidelity designs, advanced customization options, and integration with third-party tools or platforms (for now).</li>
+                <li>Focus on merchant onboarding and understanding to see if they would be comfortable turning fully automated chat on.</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Approach</h2>
+            <p>We investigated topic and conversation data to assess which topics were most popular and mapped out where each conversation topic could be mapped from Shopify's core data. This data would be fed into our prompt, along with sample conversations and fallbacks. We decided to focus on pre-purchase conversations for the purpose of user testing.</p>
+            
+            <p>Following Lean UX methodologies, we identified the problem, outcomes, and generated solution ideas. I generated multiple design explorations that were used to get feedback from the Shopify AI team and engineering to help narrow down which directions to pursue.</p>
+            
+            <img src="project-images/Shopify/sketches.avif" alt="Design sketches and explorations" class="case-study-image" data-image-index="2" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+            
+            <p>I created clickable prototypes for two design explorations - one focusing on a streamlined setup process with a simple settings page and an interactive preview, the other emphasizing a step-by-step guided process with a sandbox environment for testing and experimentation. We're currently preparing for user testing to gauge comprehension and friction in the onboarding process and A/B testing two design solutions:</p>
+            
+            <img src="project-images/Shopify/onboarding-flow.avif" alt="Onboarding flow" class="case-study-image" data-image-index="3" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+        </section>
+        
+        <section>
+            <h2>Solutions</h2>
+            
+            <div class="solution-section">
+                <h3>Solution A: Streamlined Setup Process</h3>
+                <p>This design focuses on a streamlined setup process with a simple settings page and an interactive preview. It aims to provide an efficient and easy-to-navigate experience for merchants already familiar with AI and who want to quickly set up their chat.</p>
+                <img src="project-images/Shopify/solution-a.avif" alt="Solution A: Streamlined Setup Process" class="case-study-image" data-image-index="4" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+            </div>
+            
+            <div class="solution-section">
+                <h3>Solution B: Step-by-Step Guided Process</h3>
+                <p>This design emphasizes a step-by-step guided process that ends with a sandbox environment for testing and experimentation. It aims to build trust and accommodate merchants with varying levels of experience by providing a more comprehensive onboarding experience.</p>
+                <img src="project-images/Shopify/solution-b.avif" alt="Solution B: Step-by-Step Guided Process" class="case-study-image" data-image-index="5" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+            </div>
+            
+            <p>The goal is to gather feedback and insights to help refine and improve the next design iteration. We aimed to test merchants' comprehension of the chat's capabilities and limitations and identify which designs had the least friction for turning on the chat.</p>
+        </section>
+        
+        <section>
+            <h2>Prototypes</h2>
+            <p>To test our hypothesis I created quick click-through prototypes to test our onboarding process and sandbox in an offline environment.</p>
+            
+            <img src="project-images/Shopify/mockups.avif" alt="Prototype mockups" class="case-study-image" data-image-index="6" data-all-images='["project-images/Shopify/ai-chat-post.webp", "project-images/Shopify/hypothesis.avif", "project-images/Shopify/sketches.avif", "project-images/Shopify/onboarding-flow.avif", "project-images/Shopify/solution-a.avif", "project-images/Shopify/solution-b.avif", "project-images/Shopify/mockups.avif"]'>
+            
+            <h3>Click through of prototype B</h3>
+            <p>This video includes examples of limited interactions:</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/wGK-ek9y54c" title="Shopify AI Chat Prototype Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </section>
+    </article>
+    
+    <div class="image-lightbox" id="imageLightbox">
+        <div class="image-lightbox-content" id="imageLightboxContent">
+            <button class="image-lightbox-close" id="imageLightboxClose">&times;</button>
+            <button class="image-lightbox-nav prev" id="imageLightboxPrev">‹</button>
+            <button class="image-lightbox-nav next" id="imageLightboxNext">›</button>
+            <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="Expanded image">
+            <div class="image-lightbox-counter" id="imageLightboxCounter"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Image lightbox functionality
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+        let imageClickStartX = 0;
+        let imageClickStartY = 0;
+        let imageWasDragged = false;
+        
+        function enableImageLightbox() {
+            // Add click handlers to all images
+            const allImages = document.querySelectorAll('.case-study-image');
+            allImages.forEach(img => {
+                // Track mouse/touch start to detect drags
+                img.addEventListener('mousedown', (e) => {
+                    imageClickStartX = e.clientX;
+                    imageClickStartY = e.clientY;
+                    imageWasDragged = false;
+                });
+                
+                img.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        imageClickStartX = e.touches[0].clientX;
+                        imageClickStartY = e.touches[0].clientY;
+                        imageWasDragged = false;
+                    }
+                });
+                
+                img.addEventListener('mousemove', (e) => {
+                    if (imageClickStartX !== 0 || imageClickStartY !== 0) {
+                        const deltaX = Math.abs(e.clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0 && (imageClickStartX !== 0 || imageClickStartY !== 0)) {
+                        const deltaX = Math.abs(e.touches[0].clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.touches[0].clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('click', (e) => {
+                    // Don't open lightbox if this was a drag
+                    if (imageWasDragged) {
+                        imageWasDragged = false;
+                        imageClickStartX = 0;
+                        imageClickStartY = 0;
+                        return;
+                    }
+                    
+                    e.stopPropagation();
+                    const imageSrc = img.src;
+                    const imageIndex = parseInt(img.getAttribute('data-image-index')) || 0;
+                    const allImagesJson = img.getAttribute('data-all-images');
+                    let imagesArray = [];
+                    
+                    try {
+                        imagesArray = JSON.parse(allImagesJson || '[]');
+                    } catch (e) {
+                        imagesArray = [imageSrc];
+                    }
+                    
+                    openImageLightbox(imageSrc, imageIndex, imagesArray);
+                    
+                    // Reset
+                    imageWasDragged = false;
+                    imageClickStartX = 0;
+                    imageClickStartY = 0;
+                });
+            });
+        }
+        
+        function openImageLightbox(imageSrc, imageIndex, allImages) {
+            currentLightboxImages = allImages.filter(img => img && img.trim());
+            currentLightboxIndex = Math.max(0, Math.min(imageIndex, currentLightboxImages.length - 1));
+            
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxPrev = document.getElementById('imageLightboxPrev');
+            const lightboxNext = document.getElementById('imageLightboxNext');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            // Show/hide navigation based on number of images
+            if (currentLightboxImages.length > 1) {
+                lightboxPrev.classList.remove('hidden');
+                lightboxNext.classList.remove('hidden');
+                lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+                lightboxCounter.style.display = 'block';
+            } else {
+                lightboxPrev.classList.add('hidden');
+                lightboxNext.classList.add('hidden');
+                lightboxCounter.style.display = 'none';
+            }
+            
+            // Load and display image
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        function navigateLightbox(direction) {
+            if (currentLightboxImages.length <= 1) return;
+            
+            if (direction === 'prev') {
+                currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+            } else if (direction === 'next') {
+                currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+            }
+            
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+        }
+        
+        // Lightbox event listeners
+        document.getElementById('imageLightboxClose').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeImageLightbox();
+        });
+        
+        document.getElementById('imageLightboxPrev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('prev');
+        });
+        
+        document.getElementById('imageLightboxNext').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('next');
+        });
+        
+        // Close on backdrop click
+        document.getElementById('imageLightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'imageLightbox') {
+                closeImageLightbox();
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('imageLightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeImageLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox('prev');
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox('next');
+            }
+        });
+        
+        // Enable lightbox on page load
+        enableImageLightbox();
+    </script>
+</body>
+</html>
