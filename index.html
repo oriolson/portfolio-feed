@@ -4,7 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed</title>
+    <script>
+        // Apply saved theme ASAP to avoid a flash of the wrong theme.
+        (function () {
+            const storageKey = 'theme';
+            const savedTheme = localStorage.getItem(storageKey); // 'light' | 'dark' | null
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #ecf0f2;
+            --text: #333333;
+            --muted: #666666;
+            --border: #eeeeee;
+            --surface: #ffffff;
+            --surface-subtle: #f9f9f9;
+            --link: #0066cc;
+            --focus: #667eea;
+            --danger-bg: #ffeeee;
+            --danger-border: #ffcccc;
+            --danger-text: #cc3333;
+        }
+
+        html[data-theme="light"] {
+            color-scheme: light;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #080413;
+            --text: #e6edf3;
+            --muted: #9aa4af;
+            --border: #223042;
+            --surface: #0f1620;
+            --surface-subtle: #0c121a;
+            --link: #58a6ff;
+            --focus: #8b9cff;
+            --danger-bg: rgba(220, 53, 69, 0.15);
+            --danger-border: rgba(220, 53, 69, 0.35);
+            --danger-text: #ffb4bc;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,26 +56,62 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            max-width: 800px;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
         
         header {
+            font-family: Helvetica, Arial, sans-serif;
             padding: 20px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
         }
         
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         header h1 {
             font-size: 24px;
             font-weight: 600;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(127, 127, 127, 0.12);
+        }
+
+        .theme-toggle-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            fill: currentColor;
+            opacity: 0.9;
         }
         
         .admin-toggle {
@@ -58,16 +138,14 @@
         }
         
         .feed-item {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 24px 0;
+            margin-bottom: 0;
+            border-bottom: 1px solid var(--border);
             position: relative;
         }
         
         .feed-item:last-child {
-            margin-bottom: 0;
+            border-bottom: none;
         }
         
         .feed-item-header {
@@ -83,7 +161,18 @@
             height: 24px;
             flex-shrink: 0;
             border-radius: 28%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3a3a3a 0%, #000000 50%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+        
+        .feed-item-squircle svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
         }
         
         .feed-item-header-content {
@@ -95,12 +184,13 @@
         
         .feed-item-title {
             font-size: 16px;
-            font-weight: 500;
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: 600;
         }
         
         .feed-item-date {
             font-size: 14px;
-            color: #666;
+            color: var(--muted);
         }
         
         .feed-item-image {
@@ -109,7 +199,42 @@
             height: auto;
             margin-bottom: 12px;
             display: block;
-            border-radius: 4px;
+            border-radius: 16px;
+        }
+        
+        .feed-item-gallery {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: grab;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            will-change: scroll-position;
+        }
+        
+        .feed-item-gallery::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .feed-item-gallery:active {
+            cursor: grabbing;
+        }
+        
+        .feed-item-gallery.dragging {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .feed-item-gallery-img {
+            flex: 0 0 auto;
+            width: min(40%, 400px);
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            border-radius: 16px;
         }
         
         .feed-item-like-count {
@@ -117,14 +242,14 @@
             align-items: center;
             gap: 6px;
             font-size: 14px;
-            color: #666;
+            color: var(--muted);
             margin-bottom: 12px;
         }
         
         .feed-item-like-icon {
             width: 16px;
             height: 16px;
-            fill: #666;
+            fill: var(--muted);
             flex-shrink: 0;
         }
         
@@ -135,7 +260,7 @@
         
         .feed-item-link {
             font-size: 14px;
-            color: #0066cc;
+            color: var(--link);
             text-decoration: none;
             display: inline-block;
         }
@@ -191,8 +316,8 @@
         }
         
         .admin-panel {
-            background: #f9f9f9;
-            border: 1px solid #eee;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
@@ -274,13 +399,14 @@
         }
         
         .modal-content {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             padding: 30px;
             max-width: 600px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            border: 1px solid var(--border);
         }
         
         .modal-header {
@@ -300,7 +426,7 @@
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: #666;
+            color: var(--muted);
             padding: 0;
             width: 30px;
             height: 30px;
@@ -310,7 +436,7 @@
         }
         
         .modal-close:hover {
-            color: #333;
+            color: var(--text);
         }
         
         .form-group {
@@ -322,17 +448,19 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 6px;
-            color: #333;
+            color: var(--text);
         }
         
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 14px;
             font-family: inherit;
+            background: var(--surface);
+            color: var(--text);
         }
         
         .form-group textarea {
@@ -350,23 +478,158 @@
         .loading {
             text-align: center;
             padding: 40px;
-            color: #666;
+            color: var(--muted);
         }
         
         .error {
-            background: #fee;
-            border: 1px solid #fcc;
+            background: var(--danger-bg);
+            border: 1px solid var(--danger-border);
             border-radius: 4px;
             padding: 12px;
             margin-bottom: 20px;
-            color: #c33;
+            color: var(--danger-text);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--focus);
+            outline-offset: 2px;
+        }
+        
+        .feed-item-image,
+        .feed-item-gallery-img {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feed-item-image:hover,
+        .feed-item-gallery-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .image-lightbox.active {
+            display: flex;
+        }
+        
+        .image-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+        
+        .image-lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: opacity 0.3s;
+        }
+        
+        .image-lightbox-img.loading {
+            opacity: 0;
+        }
+        
+        .image-lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        
+        .image-lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-lightbox-nav.prev {
+            left: 20px;
+        }
+        
+        .image-lightbox-nav.next {
+            right: 20px;
+        }
+        
+        .image-lightbox-nav.hidden {
+            display: none;
+        }
+        
+        .image-lightbox-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 6px 12px;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Feed</h1>
-        <button class="admin-toggle" id="adminToggle">Admin Mode</button>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+                <svg class="theme-toggle-icon" id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-14a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1zm0 20a1 1 0 0 1-1-1v-2a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1zM4.22 5.64a1 1 0 0 1-1.41 0L1.4 4.22A1 1 0 1 1 2.81 2.8l1.41 1.42a1 1 0 0 1 0 1.42zm18.38 18.36a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 0 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41zM23 13h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2zM3 13H1a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2zM20.78 5.64a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 1 1 1.41 1.41l-1.41 1.42a1 1 0 0 1-1.41 0zM2.81 24a1 1 0 0 1 0-1.41l1.41-1.41a1 1 0 1 1 1.41 1.41L4.22 24a1 1 0 0 1-1.41 0z"/>
+                </svg>
+                <span id="themeLabel">Dark</span>
+            </button>
+            <button class="admin-toggle" id="adminToggle" type="button">Admin Mode</button>
+        </div>
     </header>
     
     <div class="admin-panel" id="adminPanel">
@@ -400,8 +663,8 @@
                     <input type="text" id="postDate">
                 </div>
                 <div class="form-group">
-                    <label for="postImage">Image URL (optional)</label>
-                    <input type="url" id="postImage">
+                    <label for="postImage">Image URLs (optional, one per line or comma-separated)</label>
+                    <textarea id="postImage" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="postLikeCount">Like Count Text (optional)</label>
@@ -424,9 +687,72 @@
         </div>
     </div>
     
+    <div class="image-lightbox" id="imageLightbox">
+        <div class="image-lightbox-content" id="imageLightboxContent">
+            <button class="image-lightbox-close" id="imageLightboxClose">&times;</button>
+            <button class="image-lightbox-nav prev" id="imageLightboxPrev">‹</button>
+            <button class="image-lightbox-nav next" id="imageLightboxNext">›</button>
+            <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="Expanded image">
+            <div class="image-lightbox-counter" id="imageLightboxCounter"></div>
+        </div>
+    </div>
+    
     <script>
         let posts = [];
         let isAdminMode = false;
+
+        // Theme toggle (persists in localStorage).
+        (function () {
+            const storageKey = 'theme';
+            const themeToggle = document.getElementById('themeToggle');
+            const themeLabel = document.getElementById('themeLabel');
+            const themeIcon = document.getElementById('themeIcon');
+            const media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+            function getTheme() {
+                return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            }
+
+            function setTheme(theme, persist) {
+                document.documentElement.setAttribute('data-theme', theme);
+                if (persist) {
+                    localStorage.setItem(storageKey, theme);
+                }
+                const isDark = theme === 'dark';
+                themeToggle.setAttribute('aria-pressed', String(isDark));
+                themeLabel.textContent = isDark ? 'Light' : 'Dark';
+
+                // Swap icon between moon (dark) and sun (light).
+                themeIcon.innerHTML = isDark
+                    ? '<path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"/>'
+                    : '<path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-14a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1zm0 20a1 1 0 0 1-1-1v-2a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1zM4.22 5.64a1 1 0 0 1-1.41 0L1.4 4.22A1 1 0 1 1 2.81 2.8l1.41 1.42a1 1 0 0 1 0 1.42zm18.38 18.36a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 0 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41zM23 13h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2zM3 13H1a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2zM20.78 5.64a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 1 1 1.41 1.41l-1.41 1.42a1 1 0 0 1-1.41 0zM2.81 24a1 1 0 0 1 0-1.41l1.41-1.41a1 1 0 1 1 1.41 1.41L4.22 24a1 1 0 0 1-1.41 0z"/>';
+            }
+
+            // Initialize UI from the theme that was applied in <head>.
+            setTheme(getTheme(), false);
+
+            themeToggle.addEventListener('click', () => {
+                const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+                setTheme(nextTheme, true);
+            });
+
+            // If the user hasn't explicitly chosen a theme, follow system changes.
+            if (media) {
+                const hasSaved = localStorage.getItem(storageKey) === 'light' || localStorage.getItem(storageKey) === 'dark';
+                const onChange = (e) => {
+                    const stillHasSaved = localStorage.getItem(storageKey) === 'light' || localStorage.getItem(storageKey) === 'dark';
+                    if (stillHasSaved) return;
+                    setTheme(e.matches ? 'dark' : 'light', false);
+                };
+                if (!hasSaved) {
+                    if (typeof media.addEventListener === 'function') {
+                        media.addEventListener('change', onChange);
+                    } else if (typeof media.addListener === 'function') {
+                        media.addListener(onChange);
+                    }
+                }
+            }
+        })();
         
         // Check URL parameter for admin mode
         const urlParams = new URLSearchParams(window.location.search);
@@ -467,14 +793,45 @@
                 const titleHtml = post.title && post.title.trim() ? `<div class="feed-item-title">${escapeHtml(post.title)}</div>` : '';
                 const dateHtml = post.date && post.date.trim() ? `<div class="feed-item-date">${escapeHtml(post.date)}</div>` : '';
                 const headerContentHtml = (titleHtml || dateHtml) ? `<div class="feed-item-header-content">${titleHtml}${dateHtml}</div>` : '';
+                
+                const squircleIconSvg = post.id === '4'
+                    ? `
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109.5 124.5" focusable="false" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                                <path fill="#95BF47" d="M95.9,23.9c-0.1-0.6-0.6-1-1.1-1c-0.5,0-9.3-0.2-9.3-0.2s-7.4-7.2-8.1-7.9c-0.7-0.7-2.2-0.5-2.7-0.3c0,0-1.4,0.4-3.7,1.1c-0.4-1.3-1-2.8-1.8-4.4c-2.6-5-6.5-7.7-11.1-7.7c0,0,0,0,0,0c-0.3,0-0.6,0-1,0.1c-0.1-0.2-0.3-0.3-0.4-0.5c-2-2.2-4.6-3.2-7.7-3.1c-6,0.2-12,4.5-16.8,12.2c-3.4,5.4-6,12.2-6.8,17.5c-6.9,2.1-11.7,3.6-11.8,3.7c-3.5,1.1-3.6,1.2-4,4.5c-0.3,2.5-9.5,73-9.5,73l76.4,13.2l33.1-8.2C109.5,115.8,96,24.5,95.9,23.9z M67.2,16.8c-1.8,0.5-3.8,1.2-5.9,1.8c0-3-0.4-7.3-1.8-10.9C64,8.6,66.2,13.7,67.2,16.8z M57.2,19.9c-4,1.2-8.4,2.6-12.8,3.9c1.2-4.7,3.6-9.4,6.4-12.5c1.1-1.1,2.6-2.4,4.3-3.2C56.9,11.6,57.3,16.5,57.2,19.9z M49.1,4c1.4,0,2.6,0.3,3.6,0.9C51.1,5.8,49.5,7,48,8.6c-3.8,4.1-6.7,10.5-7.9,16.6c-3.6,1.1-7.2,2.2-10.5,3.2C31.7,18.8,39.8,4.3,49.1,4z"/>
+                                <g>
+                                    <path fill="#5E8E3E" d="M94.8,22.9c-0.5,0-9.3-0.2-9.3-0.2s-7.4-7.2-8.1-7.9c-0.3-0.3-0.6-0.4-1-0.5l0,109.7l33.1-8.2c0,0-13.5-91.3-13.6-92C95.8,23.3,95.3,22.9,94.8,22.9z"/>
+                                    <path fill="#FFFFFF" d="M58,39.9l-3.8,14.4c0,0-4.3-2-9.4-1.6c-7.5,0.5-7.5,5.2-7.5,6.4c0.4,6.4,17.3,7.8,18.3,22.9c0.7,11.9-6.3,20-16.4,20.6c-12.2,0.8-18.9-6.4-18.9-6.4l2.6-11c0,0,6.7,5.1,12.1,4.7c3.5-0.2,4.8-3.1,4.7-5.1c-0.5-8.4-14.3-7.9-15.2-21.7c-0.7-11.6,6.9-23.4,23.7-24.4C54.7,38.2,58,39.9,58,39.9z"/>
+                                </g>
+                            </svg>
+                    `
+                    : `
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                    `;
+
                 const headerHtml = headerContentHtml ? `
                     <div class="feed-item-header">
-                        <div class="feed-item-squircle"></div>
+                        <div class="feed-item-squircle">
+                            ${squircleIconSvg}
+                        </div>
                         ${headerContentHtml}
                     </div>
                 ` : '';
                 
-                const imageHtml = post.image && post.image.trim() ? `<img src="${escapeHtml(post.image)}" alt="Post image" class="feed-item-image">` : '';
+                let imageHtml = '';
+                if (post.images && Array.isArray(post.images) && post.images.length > 0) {
+                    // Filter out empty/blank URLs
+                    const validImages = post.images.filter(img => img && img.trim());
+                    if (validImages.length > 0) {
+                        const galleryImages = validImages.map((img, index) => 
+                            `<img src="${escapeHtml(img.trim())}" alt="Post image" class="feed-item-gallery-img" data-image-index="${index}" data-all-images='${JSON.stringify(validImages)}'>`
+                        ).join('');
+                        imageHtml = `<div class="feed-item-gallery">${galleryImages}</div>`;
+                    }
+                } else if (post.image && post.image.trim()) {
+                    imageHtml = `<img src="${escapeHtml(post.image)}" alt="Post image" class="feed-item-image" data-image-index="0" data-all-images='${JSON.stringify([post.image])}'>`;
+                }
                 
                 const likeCountHtml = post.likeCount && post.likeCount.trim() ? `
                     <div class="feed-item-like-count">
@@ -499,7 +856,368 @@
                 `;
                 feed.appendChild(li);
             });
+            
+            // Enable drag-to-scroll for all galleries
+            enableDragScroll();
+            
+            // Enable image lightbox clicks
+            enableImageLightbox();
         }
+        
+        // Enable drag-to-scroll for gallery containers with momentum
+        function enableDragScroll() {
+            const galleries = document.querySelectorAll('.feed-item-gallery');
+            galleries.forEach(gallery => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+                let velocity = 0;
+                let lastX = 0;
+                let lastTime = 0;
+                let animationFrame = null;
+                let momentumAnimation = null;
+                
+                // Smooth scroll using requestAnimationFrame
+                function smoothScroll(targetScroll, startScroll, duration = 300) {
+                    const startTime = performance.now();
+                    const distance = targetScroll - startScroll;
+                    
+                    function animate(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Easing function (ease-out)
+                        const ease = 1 - Math.pow(1 - progress, 3);
+                        gallery.scrollLeft = startScroll + distance * ease;
+                        
+                        if (progress < 1) {
+                            momentumAnimation = requestAnimationFrame(animate);
+                        } else {
+                            momentumAnimation = null;
+                        }
+                    }
+                    
+                    if (momentumAnimation) {
+                        cancelAnimationFrame(momentumAnimation);
+                    }
+                    momentumAnimation = requestAnimationFrame(animate);
+                }
+                
+                // Mouse events
+                gallery.addEventListener('mousedown', (e) => {
+                    // Don't start drag if clicking directly on an image (let lightbox handle it)
+                    if (e.target.classList.contains('feed-item-gallery-img')) {
+                        return;
+                    }
+                    if (momentumAnimation) {
+                        cancelAnimationFrame(momentumAnimation);
+                        momentumAnimation = null;
+                    }
+                    isDown = true;
+                    gallery.classList.add('active', 'dragging');
+                    startX = e.pageX - gallery.offsetLeft;
+                    scrollLeft = gallery.scrollLeft;
+                    lastX = e.pageX;
+                    lastTime = performance.now();
+                    velocity = 0;
+                });
+                
+                gallery.addEventListener('mouseleave', () => {
+                    if (isDown) {
+                        // Apply momentum on mouse leave
+                        if (Math.abs(velocity) > 0.5) {
+                            const targetScroll = gallery.scrollLeft - velocity * 10;
+                            const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+                            const clampedScroll = Math.max(0, Math.min(maxScroll, targetScroll));
+                            smoothScroll(clampedScroll, gallery.scrollLeft, 500);
+                        }
+                    }
+                    isDown = false;
+                    gallery.classList.remove('active', 'dragging');
+                });
+                
+                gallery.addEventListener('mouseup', () => {
+                    if (isDown) {
+                        // Apply momentum on mouse up
+                        if (Math.abs(velocity) > 0.5) {
+                            const targetScroll = gallery.scrollLeft - velocity * 10;
+                            const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+                            const clampedScroll = Math.max(0, Math.min(maxScroll, targetScroll));
+                            smoothScroll(clampedScroll, gallery.scrollLeft, 500);
+                        }
+                    }
+                    isDown = false;
+                    gallery.classList.remove('active', 'dragging');
+                });
+                
+                gallery.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    
+                    const currentTime = performance.now();
+                    const currentX = e.pageX;
+                    const deltaX = currentX - lastX;
+                    const deltaTime = currentTime - lastTime;
+                    
+                    // Calculate velocity for momentum
+                    if (deltaTime > 0) {
+                        velocity = deltaX / deltaTime;
+                    }
+                    
+                    const x = currentX - gallery.offsetLeft;
+                    const walk = (x - startX) * 1.5; // Reduced multiplier for smoother feel
+                    
+                    if (animationFrame) {
+                        cancelAnimationFrame(animationFrame);
+                    }
+                    
+                    animationFrame = requestAnimationFrame(() => {
+                        gallery.scrollLeft = scrollLeft - walk;
+                    });
+                    
+                    lastX = currentX;
+                    lastTime = currentTime;
+                });
+                
+                // Touch events with momentum
+                let touchStartX;
+                let touchScrollLeft;
+                let touchLastX = 0;
+                let touchLastTime = 0;
+                let touchVelocity = 0;
+                
+                gallery.addEventListener('touchstart', (e) => {
+                    if (momentumAnimation) {
+                        cancelAnimationFrame(momentumAnimation);
+                        momentumAnimation = null;
+                    }
+                    touchStartX = e.touches[0].pageX - gallery.offsetLeft;
+                    touchScrollLeft = gallery.scrollLeft;
+                    touchLastX = e.touches[0].pageX;
+                    touchLastTime = performance.now();
+                    touchVelocity = 0;
+                    gallery.classList.add('dragging');
+                }, { passive: true });
+                
+                gallery.addEventListener('touchmove', (e) => {
+                    if (!touchStartX) return;
+                    
+                    const currentTime = performance.now();
+                    const currentX = e.touches[0].pageX;
+                    const deltaX = currentX - touchLastX;
+                    const deltaTime = currentTime - touchLastTime;
+                    
+                    // Calculate velocity for momentum
+                    if (deltaTime > 0) {
+                        touchVelocity = deltaX / deltaTime;
+                    }
+                    
+                    const x = currentX - gallery.offsetLeft;
+                    const walk = (x - touchStartX) * 1.5; // Reduced multiplier for smoother feel
+                    
+                    if (animationFrame) {
+                        cancelAnimationFrame(animationFrame);
+                    }
+                    
+                    animationFrame = requestAnimationFrame(() => {
+                        gallery.scrollLeft = touchScrollLeft - walk;
+                    });
+                    
+                    touchLastX = currentX;
+                    touchLastTime = currentTime;
+                }, { passive: true });
+                
+                gallery.addEventListener('touchend', () => {
+                    gallery.classList.remove('dragging');
+                    
+                    // Apply momentum on touch end
+                    if (Math.abs(touchVelocity) > 0.5) {
+                        const targetScroll = gallery.scrollLeft - touchVelocity * 15;
+                        const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+                        const clampedScroll = Math.max(0, Math.min(maxScroll, targetScroll));
+                        smoothScroll(clampedScroll, gallery.scrollLeft, 600);
+                    }
+                    
+                    touchStartX = null;
+                    touchVelocity = 0;
+                });
+            });
+        }
+        
+        // Image lightbox functionality
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+        let imageClickStartX = 0;
+        let imageClickStartY = 0;
+        let imageWasDragged = false;
+        
+        function enableImageLightbox() {
+            // Add click handlers to all images
+            const allImages = document.querySelectorAll('.feed-item-image, .feed-item-gallery-img');
+            allImages.forEach(img => {
+                // Track mouse/touch start to detect drags
+                img.addEventListener('mousedown', (e) => {
+                    imageClickStartX = e.clientX;
+                    imageClickStartY = e.clientY;
+                    imageWasDragged = false;
+                });
+                
+                img.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        imageClickStartX = e.touches[0].clientX;
+                        imageClickStartY = e.touches[0].clientY;
+                        imageWasDragged = false;
+                    }
+                });
+                
+                img.addEventListener('mousemove', (e) => {
+                    if (imageClickStartX !== 0 || imageClickStartY !== 0) {
+                        const deltaX = Math.abs(e.clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0 && (imageClickStartX !== 0 || imageClickStartY !== 0)) {
+                        const deltaX = Math.abs(e.touches[0].clientX - imageClickStartX);
+                        const deltaY = Math.abs(e.touches[0].clientY - imageClickStartY);
+                        if (deltaX > 5 || deltaY > 5) {
+                            imageWasDragged = true;
+                        }
+                    }
+                });
+                
+                img.addEventListener('click', (e) => {
+                    // Don't open lightbox if this was a drag
+                    if (imageWasDragged) {
+                        imageWasDragged = false;
+                        imageClickStartX = 0;
+                        imageClickStartY = 0;
+                        return;
+                    }
+                    
+                    e.stopPropagation();
+                    const imageSrc = img.src;
+                    const imageIndex = parseInt(img.getAttribute('data-image-index')) || 0;
+                    const allImagesJson = img.getAttribute('data-all-images');
+                    let imagesArray = [];
+                    
+                    try {
+                        imagesArray = JSON.parse(allImagesJson || '[]');
+                    } catch (e) {
+                        imagesArray = [imageSrc];
+                    }
+                    
+                    openImageLightbox(imageSrc, imageIndex, imagesArray);
+                    
+                    // Reset
+                    imageWasDragged = false;
+                    imageClickStartX = 0;
+                    imageClickStartY = 0;
+                });
+            });
+        }
+        
+        function openImageLightbox(imageSrc, imageIndex, allImages) {
+            currentLightboxImages = allImages.filter(img => img && img.trim());
+            currentLightboxIndex = Math.max(0, Math.min(imageIndex, currentLightboxImages.length - 1));
+            
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxPrev = document.getElementById('imageLightboxPrev');
+            const lightboxNext = document.getElementById('imageLightboxNext');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            // Show/hide navigation based on number of images
+            if (currentLightboxImages.length > 1) {
+                lightboxPrev.classList.remove('hidden');
+                lightboxNext.classList.remove('hidden');
+                lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+                lightboxCounter.style.display = 'block';
+            } else {
+                lightboxPrev.classList.add('hidden');
+                lightboxNext.classList.add('hidden');
+                lightboxCounter.style.display = 'none';
+            }
+            
+            // Load and display image
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        function navigateLightbox(direction) {
+            if (currentLightboxImages.length <= 1) return;
+            
+            if (direction === 'prev') {
+                currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+            } else if (direction === 'next') {
+                currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+            }
+            
+            const lightboxImg = document.getElementById('imageLightboxImg');
+            const lightboxCounter = document.getElementById('imageLightboxCounter');
+            
+            lightboxImg.classList.add('loading');
+            lightboxImg.src = currentLightboxImages[currentLightboxIndex];
+            
+            lightboxImg.onload = () => {
+                lightboxImg.classList.remove('loading');
+            };
+            
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+        }
+        
+        // Lightbox event listeners
+        document.getElementById('imageLightboxClose').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeImageLightbox();
+        });
+        
+        document.getElementById('imageLightboxPrev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('prev');
+        });
+        
+        document.getElementById('imageLightboxNext').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateLightbox('next');
+        });
+        
+        // Close on backdrop click
+        document.getElementById('imageLightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'imageLightbox') {
+                closeImageLightbox();
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('imageLightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeImageLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox('prev');
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox('next');
+            }
+        });
         
         // Escape HTML to prevent XSS
         function escapeHtml(text) {
@@ -588,7 +1306,12 @@
                     document.getElementById('postId').value = post.id || '';
                     document.getElementById('postTitle').value = post.title || '';
                     document.getElementById('postDate').value = post.date || '';
-                    document.getElementById('postImage').value = post.image || '';
+                    // Populate images field: if images array exists, use it; otherwise use single image
+                    if (post.images && Array.isArray(post.images) && post.images.length > 0) {
+                        document.getElementById('postImage').value = post.images.filter(img => img && img.trim()).join('\n');
+                    } else {
+                        document.getElementById('postImage').value = post.image || '';
+                    }
                     document.getElementById('postLikeCount').value = post.likeCount || '';
                     document.getElementById('postContent').value = post.content || '';
                     document.getElementById('postLink').value = post.link || '';
@@ -620,15 +1343,33 @@
             e.preventDefault();
             
             const postId = document.getElementById('postId').value;
+            const imageInput = document.getElementById('postImage').value.trim();
+            
+            // Parse image URLs: support both comma-separated and newline-separated
+            let images = [];
+            if (imageInput) {
+                images = imageInput
+                    .split(/[,\n]/)
+                    .map(url => url.trim())
+                    .filter(url => url.length > 0);
+            }
+            
             const postData = {
                 id: postId || Date.now().toString(),
                 title: document.getElementById('postTitle').value,
                 date: document.getElementById('postDate').value,
-                image: document.getElementById('postImage').value,
                 likeCount: document.getElementById('postLikeCount').value,
                 content: document.getElementById('postContent').value,
                 link: document.getElementById('postLink').value
             };
+            
+            // Store images array if there are any, otherwise don't include image/images fields
+            if (images.length > 0) {
+                postData.images = images;
+            } else if (imageInput) {
+                // If only one URL was provided, store as images array with one item for consistency
+                postData.images = [imageInput];
+            }
             
             if (postId) {
                 // Update existing post

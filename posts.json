@@ -2,25 +2,47 @@
   {
     "id": "1",
     "title": "Bringing Agents to Mobile",
-    "date": "Dec, 2025",
-    "image": "https://picsum.photos/800/400?random=1",
+    "date": "Oct 2025",
+    "images": [
+      "project-images/Agents-on-Mobile/Slide 3.jpg",
+      "project-images/Agents-on-Mobile/Slide 4.jpg",
+      "project-images/Agents-on-Mobile/Slide 5.jpg"
+    ],
     "likeCount": "10k+ users engaged with this",
-    "content": "Bringing Agentic workflows to GitHub Mobile so developers can build and iterate on their ideas faster.",
-    "link": "#"
+    "content": "Bringing Agentic workflows to GitHub Mobile so developers can build and iterate on their ideas faster. Designed Agent HQ, agentic workflows, and live activities for iOS and Android.",
+    "link": "https://github.blog/changelog/2025-09-24-start-and-track-copilot-coding-agent-tasks-in-github-mobile/s"
   },
   {
     "id": "2",
-    "title": "Second Post",
-    "date": "January 2, 2024",
-    "image": "https://picsum.photos/800/400?random=2",
+    "title": "Fine Tuned Models",
+    "date": "Sept 2024",
+    "image": "project-images/Agents-on-Mobile/model-trainer.jpg",
     "likeCount": "10k+ users engaged with this",
-    "content": "This is the second post in the feed.",
-    "link": "#"
+    "content": "Fine tuned models to make AI Storefront more accurate and helpful.",
+    "link": "https://github.blog/news-insights/product-news/fine-tuned-models-are-now-in-limited-public-beta-for-github-copilot-enterprise/"
   },
   {
     "id": "3",
-    "title": "Third Post",
-    "date": "January 3, 2024",
+    "title": "Redesigning the Marketplace",
+    "date": "May 2024",
+    "image": "project-images/Agents-on-Mobile/extensions.jpg",
+    "likeCount": "10k+ users engaged with this",
+    "content": "This is the third post in the feed.",
+    "link": "#"
+  },
+  {
+    "id": "4",
+    "title": "AI Storefront Chat",
+    "date": "Jun 2022",
+    "image": "https://picsum.photos/800/400?random=3",
+    "likeCount": "10k+ users engaged with this",
+    "content": "This is the third post in the feed.",
+    "link": "#"
+  },
+  {
+    "id": "5",
+    "title": "Dashboard and Onboarding Experience",
+    "date": "Feb 2021",
     "image": "https://picsum.photos/800/400?random=3",
     "likeCount": "10k+ users engaged with this",
     "content": "This is the third post in the feed.",
