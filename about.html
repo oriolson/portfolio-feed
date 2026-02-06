@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About me</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #140700;
+            background: #f5f5f6;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        header {
+            padding: 40px 0;
+            margin-bottom: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 12px;
+        }
+        header h1 {
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .header-divider {
+            height: 0;
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            margin: 0;
+        }
+        .header-subtitle {
+            font-size: 16px;
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-weight: 400;
+            color: #848484;
+            margin-top: -2px;
+        }
+        .header-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            margin-left: auto;
+            list-style: none;
+        }
+        .header-nav-item {
+            font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #848484;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .header-nav-item::before {
+            content: "";
+            display: inline-block;
+            width: 1.25em;
+            flex-shrink: 0;
+        }
+        .header-nav-item:hover {
+            color: #140700;
+        }
+        .header-nav-item.is-active {
+            font-weight: 500;
+            color: #140700;
+        }
+        .header-nav-item.is-active::before {
+            content: "→";
+        }
+        .feedback-avatar-wrapper { position: relative; }
+        .feedback-avatar-trigger {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: #e0e0e0;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #140700;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .feedback-avatar-trigger:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .feedback-avatar-trigger img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .feedback-popover {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            margin-top: 10px;
+            min-width: 260px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+            padding: 6px 0;
+            list-style: none;
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
+            transition: visibility 0.2s ease-out, opacity 0.2s ease-out, transform 0.2s ease-out;
+            z-index: 1000;
+        }
+        .feedback-popover.is-open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .feedback-popover-user { padding: 12px 14px 10px; }
+        .feedback-popover-user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #140700;
+            margin: 0 0 2px 0;
+        }
+        .feedback-popover-user-email-row {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin: 0 0 4px 0;
+        }
+        .feedback-popover-user-email { font-size: 12px; color: #666; margin: 0; }
+        .feedback-popover-copy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            padding: 0;
+            margin: -10px -4px;
+            width: auto;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+        }
+        .feedback-popover-copy-icon {
+            display: block;
+            flex-shrink: 0;
+            width: 13px;
+            height: 13px;
+            color: inherit;
+        }
+        .feedback-popover-copy-btn-wrapper { position: relative; }
+        .feedback-popover-copy-tooltip {
+            position: absolute;
+            left: 0;
+            bottom: 100%;
+            margin-bottom: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            color: #fff;
+            background: #140700;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s, visibility 0.15s;
+        }
+        .feedback-popover-copy-tooltip.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .feedback-popover-user-location { font-size: 12px; color: #666; margin: 0; }
+        .feedback-popover-divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.06);
+            margin: 6px 10px;
+            border: none;
+        }
+        .feedback-popover a,
+        .feedback-popover button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: calc(100% - 12px);
+            margin: 0 6px;
+            padding: 10px 12px;
+            text-align: left;
+            font-family: inherit;
+            font-size: 13px;
+            color: #140700;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .feedback-popover a.feedback-popover-item { padding: 10px 12px; }
+        .feedback-popover a:hover,
+        .feedback-popover button:hover { background: rgba(0, 0, 0, 0.05); }
+        button.feedback-popover-copy-btn {
+            padding: 4px;
+            width: auto;
+            min-width: 0;
+            color: #666;
+        }
+        button.feedback-popover-copy-btn:hover {
+            color: #140700;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+        }
+        .feedback-popover-item-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: #6b6b6b;
+        }
+        .feedback-popover a:hover .feedback-popover-item-icon,
+        .feedback-popover button:hover .feedback-popover-item-icon { color: #140700; }
+        .about-content {
+            padding: 40px 0 0;
+            font-size: 16px;
+            color: #666;
+        }
+        .about-content a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .about-content a:hover {
+            text-decoration: underline;
+        }
+        .about-content p:first-of-type {
+            color: #140700;
+        }
+        .about-content p:last-of-type {
+            margin-top: 16px;
+        }
+        .feedback-modal {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; padding: 20px;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+        .feedback-modal.is-open { opacity: 1; visibility: visible; }
+        .feedback-modal-dialog {
+            background: #fff; border-radius: 12px; max-width: 400px; width: 100%;
+            padding: 24px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .feedback-modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .feedback-modal-title { font-size: 18px; font-weight: 500; margin: 0; }
+        .feedback-modal-close { background: none; border: none; font-size: 24px; line-height: 1; color: #666; cursor: pointer; padding: 0 0 0 8px; }
+        .feedback-modal-close:hover { color: #140700; }
+        .feedback-modal-form label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+        .feedback-modal-form textarea, .feedback-modal-form input[type="email"] {
+            width: 100%; font-family: inherit; font-size: 14px; padding: 10px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 8px; background: #fff; margin-bottom: 16px;
+            resize: vertical; min-height: 100px;
+        }
+        .feedback-modal-form input[type="email"] { min-height: 0; }
+        .feedback-modal-form textarea:focus, .feedback-modal-form input[type="email"]:focus {
+            outline: none; border-color: rgba(0, 0, 0, 0.35);
+        }
+        .feedback-modal-form button[type="submit"] {
+            font-family: inherit; font-size: 14px; font-weight: 500; color: #fff; background: #140700;
+            border: none; border-radius: 8px; padding: 10px 20px; cursor: pointer;
+        }
+        .feedback-modal-form button[type="submit"]:hover { background: #2d1a0d; }
+        .feedback-modal-form button[type="submit"]:disabled { opacity: 0.7; cursor: not-allowed; }
+        .feedback-modal-success { display: none; text-align: center; padding: 20px 0; }
+        .feedback-modal-success.is-visible { display: block; }
+        .feedback-modal-form.is-hidden { display: none; }
+        .feedback-toast {
+            position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            background: #140700; color: #fff; padding: 12px 20px;
+            border-radius: 8px; font-size: 14px; font-family: inherit;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); z-index: 1001;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+        }
+        .feedback-toast.is-visible {
+            opacity: 1; visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="feedback-avatar-wrapper">
+            <button type="button" class="feedback-avatar-trigger" id="feedbackAvatarTrigger" aria-label="Open menu" aria-haspopup="menu" aria-expanded="false">
+                <img src="project-images/IMG_7134.JPG" alt="" width="40" height="40" class="feedback-avatar-img">
+            </button>
+            <div class="feedback-popover" id="feedbackPopover" role="menu" aria-label="Feedback menu">
+                <div class="feedback-popover-user">
+                    <p class="feedback-popover-user-name">Orianna Olson (she/her)</p>
+                    <div class="feedback-popover-user-email-row">
+                        <span class="feedback-popover-user-email" id="feedbackPopoverEmail">ori.eval08@me.com</span>
+                        <span class="feedback-popover-copy-btn-wrapper">
+                            <button type="button" class="feedback-popover-copy-btn" id="feedbackCopyBtn" aria-label="Copy email"><svg class="feedback-popover-copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button>
+                            <span class="feedback-popover-copy-tooltip" id="feedbackCopyTooltip" role="status" aria-live="polite">Copied!</span>
+                        </span>
+                    </div>
+                    <p class="feedback-popover-user-location">Currently in Brooklyn, NY</p>
+                </div>
+                <hr class="feedback-popover-divider">
+                <a href="https://www.linkedin.com/in/oriolson/" target="_blank" rel="noopener noreferrer" role="menuitem" class="feedback-popover-item">
+                    <svg class="feedback-popover-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+        <div>
+            <h1>Ori Olson</h1>
+            <p class="header-subtitle">Product design @ GitHub</p>
+        </div>
+        <nav class="header-nav" aria-label="Main">
+            <a href="index.html" class="header-nav-item">Featured work</a>
+            <a href="about.html" class="header-nav-item is-active">About me</a>
+        </nav>
+    </header>
+    <hr class="header-divider">
+
+    <main class="about-content">
+        <p>About me</p>
+        <p>I'm currently building agentic experiences on GitHub mobile, making it easier to code on the go and build projects with AI. I utilize a combination of user research, rapid prototyping, design engineering, and cross-team collaboration to build and ship projects.</p>
+        <p><a href="https://www.linkedin.com/in/oriolson/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+    </main>
+
+    <div class="feedback-modal" id="feedbackModal" aria-hidden="true" aria-label="Send feedback">
+        <div class="feedback-modal-dialog" role="dialog">
+            <div class="feedback-modal-header">
+                <h2 class="feedback-modal-title">Send feedback</h2>
+                <button type="button" class="feedback-modal-close" id="feedbackModalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="feedback-modal-success" id="feedbackModalSuccess">Thanks! I'll get back to you soon.</div>
+            <form class="feedback-modal-form" id="feedbackModalForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+                <label for="feedback-modal-message">Message</label>
+                <textarea id="feedback-modal-message" name="message" required placeholder="Your feedback or question..."></textarea>
+                <label for="feedback-modal-email">Your email (optional, if you'd like a reply)</label>
+                <input type="email" id="feedback-modal-email" name="_replyto" placeholder="you@example.com">
+                <button type="submit" id="feedbackModalSubmit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="feedback-toast" id="feedbackToast" role="status" aria-live="polite">Thanks! I'll get back to you soon.</div>
+
+    <script>
+        (function initFeedbackMenu() {
+            const trigger = document.getElementById('feedbackAvatarTrigger');
+            const popover = document.getElementById('feedbackPopover');
+            if (!trigger || !popover) return;
+            function openMenu() {
+                popover.classList.add('is-open');
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+            function closeMenu() {
+                popover.classList.remove('is-open');
+                trigger.setAttribute('aria-expanded', 'false');
+                trigger.focus();
+            }
+            function isOpen() {
+                return popover.classList.contains('is-open');
+            }
+            trigger.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (isOpen()) closeMenu();
+                else openMenu();
+            });
+            document.addEventListener('click', function (e) {
+                if (!isOpen()) return;
+                if (trigger.contains(e.target) || popover.contains(e.target)) return;
+                closeMenu();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && isOpen()) closeMenu();
+            });
+            const copyBtn = document.getElementById('feedbackCopyBtn');
+            const tooltip = document.getElementById('feedbackCopyTooltip');
+            const emailEl = document.getElementById('feedbackPopoverEmail');
+            if (copyBtn && tooltip && emailEl) {
+                let tooltipTimeout = null;
+                copyBtn.addEventListener('click', function () {
+                    const email = emailEl.textContent.trim();
+                    navigator.clipboard.writeText(email).then(function () {
+                        tooltip.classList.add('is-visible');
+                        if (tooltipTimeout) clearTimeout(tooltipTimeout);
+                        tooltipTimeout = setTimeout(function () {
+                            tooltip.classList.remove('is-visible');
+                            tooltipTimeout = null;
+                        }, 1500);
+                    });
+                });
+            }
+        })();
+        (function initFeedbackModal() {
+            const modal = document.getElementById('feedbackModal');
+            const form = document.getElementById('feedbackModalForm');
+            const successEl = document.getElementById('feedbackModalSuccess');
+            const closeBtn = document.getElementById('feedbackModalClose');
+            const submitBtn = document.getElementById('feedbackModalSubmit');
+            const toastEl = document.getElementById('feedbackToast');
+            if (!modal || !form) return;
+            function closeModal() {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+            function showForm() {
+                form.classList.remove('is-hidden');
+                if (successEl) successEl.classList.remove('is-visible');
+                form.reset();
+            }
+            function showToast() {
+                if (!toastEl) return;
+                toastEl.classList.add('is-visible');
+                setTimeout(function () { toastEl.classList.remove('is-visible'); }, 3500);
+            }
+            closeBtn.addEventListener('click', function () { closeModal(); showForm(); });
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) { closeModal(); showForm(); }
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+                    closeModal();
+                    showForm();
+                }
+            });
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (!submitBtn) return;
+                submitBtn.disabled = true;
+                const action = form.getAttribute('action');
+                const formData = new FormData(form);
+                fetch(action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
+                    .then(function (res) {
+                        if (res.ok) {
+                            closeModal();
+                            showForm();
+                            showToast();
+                        }
+                        submitBtn.disabled = false;
+                    })
+                    .catch(function () {
+                        submitBtn.disabled = false;
+                    });
+            });
+        })();
+    </script>
+</body>
+</html>
