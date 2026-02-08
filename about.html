@@ -101,8 +101,8 @@
         }
         .feedback-avatar-wrapper { position: relative; }
         .feedback-avatar-trigger {
-            width: 56px;
-            height: 56px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             border: 1px solid rgba(0, 0, 0, 0.1);
             background: #e0e0e0;
@@ -263,7 +263,7 @@
             color: #666;
         }
         .about-content a {
-            color: #0066cc;
+            color: #0052a3;
             text-decoration: none;
         }
         .about-content a:hover {
@@ -324,9 +324,26 @@
             opacity: 1; visibility: visible;
             transform: translateX(-50%) translateY(0);
         }
+        
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #140700;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 10000;
+            border-radius: 0 0 4px 0;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <div class="feedback-avatar-wrapper">
             <button type="button" class="feedback-avatar-trigger" id="feedbackAvatarTrigger" aria-label="Open menu" aria-haspopup="menu" aria-expanded="false">
@@ -362,7 +379,7 @@
     </header>
     <hr class="header-divider">
 
-    <main class="about-content">
+    <main class="about-content" id="main-content">
         <p>About me</p>
         <p>I'm currently building agentic experiences on GitHub mobile, making it easier to code on the go and build projects with AI. I utilize a combination of user research, rapid prototyping, design engineering, and cross-team collaboration to build and ship projects.</p>
         <p><a href="https://www.linkedin.com/in/oriolson/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
@@ -375,6 +392,7 @@
                 <button type="button" class="feedback-modal-close" id="feedbackModalClose" aria-label="Close">&times;</button>
             </div>
             <div class="feedback-modal-success" id="feedbackModalSuccess">Thanks! I'll get back to you soon.</div>
+            <!-- TODO: Replace YOUR_FORMSPREE_ID with actual Formspree form ID to enable feedback submission -->
             <form class="feedback-modal-form" id="feedbackModalForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
                 <label for="feedback-modal-message">Message</label>
                 <textarea id="feedback-modal-message" name="message" required placeholder="Your feedback or question..."></textarea>
