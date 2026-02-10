@@ -83,7 +83,7 @@ Deploy to any static hosting service:
 
 ### Adding New Projects
 
-Edit `posts.json` to add new portfolio entries:
+Edit `posts.json` to add new portfolio entries. Add this object to the posts array:
 
 ```json
 {
@@ -95,6 +95,15 @@ Edit `posts.json` to add new portfolio entries:
   "content": "Project description",
   "link": "case-study-page.html or external URL"
 }
+```
+
+The posts.json file should maintain an array structure like:
+```json
+[
+  { "id": "1", ... },
+  { "id": "2", ... },
+  { "id": "6", ... }  // Your new project
+]
 ```
 
 ### Updating Styles
