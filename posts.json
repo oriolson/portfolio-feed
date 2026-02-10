@@ -45,5 +45,11 @@
     "likeCount": "24% increase in engagement and 5% lift in activation",
     "content": "Redesigned the Mapbox dashboard and sign up flow to improve new user onboarding and reduce early-stage churn. Introduced personalized workflows and clearer entry points for key actions like adding data and styling maps.",
     "link": "case-study-mapbox.html"
+  },
+  {
+    "id": "6",
+    "title": "A Digital Dream",
+    "date": "Feb 2026",
+    "content": "In circuits deep and code so bright,\nWhere pixels dance in endless light,\nA dream unfolds on screens so wide,\nWhere creativity and logic coincide.\n\nThrough iterations, bugs, and breaks,\nWe craft the future that it takes,\nWith every line and every test,\nWe build the tools that serve us best."
   }
 ]
